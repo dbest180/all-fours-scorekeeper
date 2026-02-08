@@ -1,1 +1,200 @@
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Fours Scorekeeper</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Setup Screen -->
+        <div id="setup-screen" class="screen active">
+            <div class="logo">
+                <div class="logo-icon">♠♣♥♦</div>
+                <h1>All Fours <span>Scorekeeper</span></h1>
+            </div>
+            
+            <div class="setup-card">
+                <h2><i class="fas fa-cog"></i> Game Setup</h2>
+                
+                <div class="form-group">
+                    <label for="player-count"><i class="fas fa-users"></i> Number of Players</label>
+                    <div class="player-options">
+                        <button class="player-option" data-count="2">2 Players</button>
+                        <button class="player-option" data-count="3">3 Players</button>
+                        <button class="player-option active" data-count="4">4 Players</button>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="target-score"><i class="fas fa-bullseye"></i> Target Score</label>
+                    <div class="target-input">
+                        <button class="target-btn" data-target="7">7</button>
+                        <button class="target-btn" data-target="14">14</button>
+                        <button class="target-btn" data-target="21">21</button>
+                        <div class="custom-target">
+                            <input type="number" id="custom-target" min="1" max="100" value="7">
+                            <span>points to win</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label><i class="fas fa-id-card"></i> Player Names</label>
+                    <div class="name-inputs">
+                        <div class="name-input">
+                            <input type="text" id="player1" placeholder="Player 1" value="Player 1">
+                        </div>
+                        <div class="name-input">
+                            <input type="text" id="player2" placeholder="Player 2" value="Player 2">
+                        </div>
+                        <div class="name-input" id="player3-container">
+                            <input type="text" id="player3" placeholder="Player 3" value="Player 3">
+                        </div>
+                        <div class="name-input" id="player4-container">
+                            <input type="text" id="player4" placeholder="Player 4" value="Player 4">
+                        </div>
+                    </div>
+                </div>
+                
+                <button id="start-game" class="btn-primary">
+                    <i class="fas fa-play"></i> Start Game
+                </button>
+            </div>
+            
+            <div class="footer-note">
+                <p><i class="fas fa-info-circle"></i> Just tap a score cell to add points. Game saves automatically!</p>
+            </div>
+        </div>
+        
+        <!-- Game Screen -->
+        <div id="game-screen" class="screen">
+            <div class="game-header">
+                <div class="header-left">
+                    <button id="back-to-setup" class="icon-btn" title="New Game">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <h2>All Fours Scorekeeper</h2>
+                </div>
+                <div class="header-right">
+                    <button id="add-round" class="btn-secondary">
+                        <i class="fas fa-plus"></i> Add Round
+                    </button>
+                    <button id="undo-btn" class="icon-btn" title="Undo Last Entry">
+                        <i class="fas fa-undo"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="target-display">
+                <div class="target-info">
+                    <span>Target: <strong id="current-target">7</strong> points</span>
+                    <button id="change-target" class="small-btn">Change</button>
+                </div>
+                <div class="quick-score-buttons">
+                    <button class="quick-btn" data-points="1">+1</button>
+                    <button class="quick-btn" data-points="3">+3</button>
+                    <button class="quick-btn" data-points="4">+4</button>
+                    <button class="quick-btn" data-points="6">+6</button>
+                    <button class="quick-btn" data-points="10">+10</button>
+                </div>
+            </div>
+            
+            <div class="scoreboard-container">
+                <div class="table-wrapper">
+                    <table id="score-table">
+                        <thead>
+                            <tr id="player-headers">
+                                <!-- Player headers will be inserted here -->
+                            </tr>
+                        </thead>
+                        <tbody id="score-body">
+                            <!-- Rounds will be inserted here -->
+                        </tbody>
+                        <tfoot>
+                            <tr id="total-row">
+                                <!-- Total scores will be inserted here -->
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="game-footer">
+                <div class="footer-actions">
+                    <button id="clear-game" class="btn-danger">
+                        <i class="fas fa-trash"></i> Clear Game
+                    </button>
+                    <button id="new-game" class="btn-secondary">
+                        <i class="fas fa-redo"></i> New Game
+                    </button>
+                </div>
+                <div class="auto-save">
+                    <i class="fas fa-save"></i> Auto-saved
+                </div>
+            </div>
+        </div>
+        
+        <!-- Score Input Modal -->
+        <div id="score-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Add Points</h3>
+                    <button id="close-modal" class="close-btn">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="selected-player">
+                        Adding points for: <span id="modal-player-name">Player 1</span>
+                    </div>
+                    
+                    <div class="quick-points">
+                        <h4>Quick Add:</h4>
+                        <div class="quick-buttons">
+                            <button class="point-btn" data-points="1">+1 (Jack/High/Low)</button>
+                            <button class="point-btn" data-points="3">+3 (Hang Jack!)</button>
+                            <button class="point-btn" data-points="4">+4 (Game)</button>
+                            <button class="point-btn" data-points="6">+6 (Trumps)</button>
+                            <button class="point-btn" data-points="10">+10 (Cards)</button>
+                        </div>
+                    </div>
+                    
+                    <div class="custom-points">
+                        <h4>Custom Amount:</h4>
+                        <div class="custom-input">
+                            <div class="number-input">
+                                <button class="num-btn minus">−</button>
+                                <input type="number" id="points-input" min="0" max="100" value="0">
+                                <button class="num-btn plus">+</button>
+                            </div>
+                            <div class="preset-buttons">
+                                <button class="preset-btn" data-preset="2">+2</button>
+                                <button class="preset-btn" data-preset="5">+5</button>
+                                <button class="preset-btn" data-preset="7">+7</button>
+                                <button class="preset-btn" data-preset="14">+14</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="cancel-btn" class="btn-secondary">Cancel</button>
+                    <button id="apply-points" class="btn-primary">Add Points</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Confetti Canvas -->
+        <canvas id="confetti-canvas"></canvas>
+        
+        <!-- Audio Elements -->
+        <audio id="win-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-winning-chimes-2015.mp3" preload="auto"></audio>
+        <audio id="click-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-select-click-1109.mp3" preload="auto"></audio>
+        <audio id="card-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-card-deck-shuffle-914.mp3" preload="auto"></audio>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
