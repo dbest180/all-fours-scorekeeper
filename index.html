@@ -1,13 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>All Fours Scorekeeper</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
 </head>
+
 <body>
     <div class="container">
         <!-- Setup Screen -->
@@ -16,10 +19,10 @@
                 <div class="logo-icon">♠♣♥♦</div>
                 <h1>All Fours <span>Scorekeeper</span></h1>
             </div>
-            
+
             <div class="setup-card">
                 <h2><i class="fas fa-cog"></i> Game Setup</h2>
-                
+
                 <div class="form-group">
                     <label for="player-count"><i class="fas fa-users"></i> Number of Players</label>
                     <div class="player-options">
@@ -28,7 +31,7 @@
                         <button class="player-option active" data-count="4">4 Players</button>
                     </div>
                 </div>
-                
+
                 <div class="form-group">
                     <label for="target-score"><i class="fas fa-bullseye"></i> Target Score</label>
                     <div class="target-input">
@@ -41,7 +44,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="form-group">
                     <label><i class="fas fa-id-card"></i> Player Names</label>
                     <div class="name-inputs">
@@ -59,17 +62,17 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <button id="start-game" class="btn-primary">
                     <i class="fas fa-play"></i> Start Game
                 </button>
             </div>
-            
+
             <div class="footer-note">
                 <p><i class="fas fa-info-circle"></i> Just tap a score cell to add points. Game saves automatically!</p>
             </div>
         </div>
-        
+
         <!-- Game Screen -->
         <div id="game-screen" class="screen">
             <div class="game-header">
@@ -88,7 +91,7 @@
                     </button>
                 </div>
             </div>
-            
+
             <div class="target-display">
                 <div class="target-info">
                     <span>Target: <strong id="current-target">7</strong> points</span>
@@ -102,7 +105,7 @@
                     <button class="quick-btn" data-points="10">+10</button>
                 </div>
             </div>
-            
+
             <div class="scoreboard-container">
                 <div class="table-wrapper">
                     <table id="score-table">
@@ -122,7 +125,7 @@
                     </table>
                 </div>
             </div>
-            
+
             <div class="game-footer">
                 <div class="footer-actions">
                     <button id="clear-game" class="btn-danger">
@@ -137,7 +140,7 @@
                 </div>
             </div>
         </div>
-        
+
         <!-- Score Input Modal -->
         <div id="score-modal" class="modal">
             <div class="modal-content">
@@ -149,18 +152,23 @@
                     <div class="selected-player">
                         Adding points for: <span id="modal-player-name">Player 1</span>
                     </div>
-                    
+
                     <div class="quick-points">
-                        <h4>Quick Add:</h4>
+                        <h4>Add Points for This Round:</h4>
                         <div class="quick-buttons">
-                            <button class="point-btn" data-points="1">+1 (Jack/High/Low)</button>
-                            <button class="point-btn" data-points="3">+3 (Hang Jack!)</button>
-                            <button class="point-btn" data-points="4">+4 (Game)</button>
-                            <button class="point-btn" data-points="6">+6 (Trumps)</button>
-                            <button class="point-btn" data-points="10">+10 (Cards)</button>
+                            <button class="point-btn" data-points="1" data-point-type="high">+1 (High)</button>
+                            <button class="point-btn" data-points="1" data-point-type="low">+1 (Low)</button>
+                            <button class="point-btn" data-points="1" data-point-type="jack">+1 (Jack)</button>
+                            <button class="point-btn" data-points="1" data-point-type="game">+1 (Game)</button>
+                            <button class="point-btn" data-points="3" data-point-type="hang_jack">+3 (Hang Jack!)</button>
+                            <button class="point-btn" data-points="1" data-point-type="beg">+1 (Beg/Knock)</button>
+                            <button class="point-btn" data-points="1" data-point-type="miss_deal">+1 (Miss Deal)</button>
+                            <button class="point-btn" data-points="3" data-point-type="kick_jack">+3 (Kick - Jack)</button>
+                            <button class="point-btn" data-points="2" data-point-type="kick_six">+2 (Kick - Six)</button>
+                            <button class="point-btn" data-points="1" data-point-type="kick_ace">+1 (Kick - Ace)</button>
                         </div>
                     </div>
-                    
+
                     <div class="custom-points">
                         <h4>Custom Amount:</h4>
                         <div class="custom-input">
@@ -184,17 +192,21 @@
                 </div>
             </div>
         </div>
-        
+
         <!-- Confetti Canvas -->
         <canvas id="confetti-canvas"></canvas>
-        
+
         <!-- Audio Elements -->
-        <audio id="win-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-winning-chimes-2015.mp3" preload="auto"></audio>
-        <audio id="click-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-select-click-1109.mp3" preload="auto"></audio>
-        <audio id="card-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-card-deck-shuffle-914.mp3" preload="auto"></audio>
+        <audio id="win-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-winning-chimes-2015.mp3"
+            preload="auto"></audio>
+        <audio id="click-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-select-click-1109.mp3"
+            preload="auto"></audio>
+        <audio id="card-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-card-deck-shuffle-914.mp3"
+            preload="auto"></audio>
     </div>
-    
+
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <script src="script.js"></script>
 </body>
+
 </html>
